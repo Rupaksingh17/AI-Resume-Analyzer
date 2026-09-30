@@ -1,0 +1,67 @@
+{% if result is defined and result %}
+
+    <h3>ATS Score: {{ result.ats_score or 0 }}%</h3>
+
+    <div class="progress">
+        <div class="progress-bar"
+             style="width: {{ result.ats_score or 0 }}%;
+             background:
+             {% if result.ats_score < 40 %} red
+             {% elif result.ats_score < 70 %} orange
+             {% else %} green
+             {% endif %};">
+            {{ result.ats_score or 0 }}%
+        </div>
+    </div>
+
+    <h3>💼 Suggested Role: {{ result.predicted_role or "N/A" }}</h3>
+
+    <h4>✅ Skills Found:</h4>
+    <div>
+        {% if result.skills %}
+            {% for skill in result.skills %}
+                <span class="badge">{{ skill }}</span>
+            {% endfor %}
+        {% else %}
+            <p>No skills detected</p>
+        {% endif %}
+    </div>
+
+    <h4>❌ Missing Skills:</h4>
+    <div>
+        {% if result.missing_skills %}
+            {% for skill in result.missing_skills %}
+                <span class="badge missing">{{ skill }}</span>
+            {% endfor %}
+        {% else %}
+            <p>No missing skills 🎉</p>
+        {% endif %}
+    </div>
+
+    <h4>📊 Suggestions:</h4>
+    <ul>
+        {% if result.feedback %}
+            {% for f in result.feedback %}
+                <li>{{ f }}</li>
+            {% endfor %}
+        {% else %}
+            <li>No suggestions</li>
+        {% endif %}
+    </ul>
+
+    <h4>📊 Role Match Score:</h4>
+    <ul>
+        {% if result.role_scores %}
+            {% for role, score in result.role_scores.items() %}
+                <li>{{ role }} → {{ score }}%</li>
+            {% endfor %}
+        {% else %}
+            <li>No data</li>
+        {% endif %}
+    </ul>
+
+    <a href="/download">
+        <button class="download-btn">⬇ Download Report</button>
+    </a>
+
+{% endif %}
